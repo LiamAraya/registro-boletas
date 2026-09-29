@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de Boletas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <span class="eyebrow">Boleta electrónica · registro personal</span>
+    <h1>Registro de Boletas</h1>
+    <p class="subtitle">Sube o toma una foto de una boleta. La app intenta leer el monto, la fecha y el número — revisa y guarda.</p>
+  </header>
+
+  <main>
+    <section class="capture-card">
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept="image/*" capture="environment" hidden>
+        <div id="uploadPrompt">
+          <div class="upload-icon">📷</div>
+          <p><strong>Haz clic para elegir o tomar una foto</strong></p>
+          <p class="hint">o arrastra una imagen aquí</p>
+        </div>
+        <img id="preview" hidden>
+      </div>
+
+      <div id="ocrStatus" class="ocr-status" hidden>
+        <div class="spinner"></div>
+        <span id="ocrStatusText">Leyendo la boleta…</span>
+      </div>
+
+      <form id="entryForm" class="entry-form" hidden>
+        <div class="field">
+          <label for="fecha">Fecha</label>
+          <input type="date" id="fecha" required>
+        </div>
+        <div class="field">
+          <label for="monto">Monto</label>
+          <input type="text" id="monto" placeholder="0.00" required inputmode="decimal">
+        </div>
+        <div class="field">
+          <label for="numero">Número de boleta</label>
+          <input type="text" id="numero" placeholder="F001-000123" required>
+        </div>
+
+        <details id="rawTextWrap" class="raw-text">
+          <summary>Texto detectado por OCR</summary>
+          <pre id="rawText"></pre>
+        </details>
+
+        <div class="form-actions">
+          <button type="button" id="cancelBtn" class="btn secondary">Cancelar</button>
+          <button type="submit" class="btn primary">Guardar boleta</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="list-card">
+      <div class="list-header">
+        <h2>Boletas guardadas (<span id="count">0</span>)</h2>
+        <div class="list-actions">
+          <span id="totalSum" class="total-sum"></span>
+          <button id="exportBtn" class="btn small">Exportar CSV</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Fecha</th>
+              <th>Monto</th>
+              <th>N° boleta</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <p id="emptyMsg" class="empty-msg">Aún no has guardado ninguna boleta.</p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
